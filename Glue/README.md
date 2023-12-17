@@ -49,3 +49,34 @@ dyfFilter = Filter.apply(
     f = lambda x: x["lastname"] in "Adams"
 )
 ```
+
+- **Join 2 Dynamic Frames**
+
+```
+dyfJoin = dyfCustomer.join(['customerid'],['customerid'], dyfOrders)
+```
+
+- **Write Dynamic Frame to S3**
+```
+glueContext.write_dynamic_frame.from_options(
+    frame = dyfCustomer,
+    connection_type= "s3",
+    connection_options={
+        "path": "s3://pyspark-tutorial-digx/write_down_dyf_to_s3/"
+    },
+    format = "csv",
+    format_options={
+        "separator": ","
+    },
+    transformation_ctx = "datasink2"
+)
+```
+
+- **Write Dynamic Frame to Data Catalog**
+```
+glueContext.write_dynamic_frame.from_catalog(
+    frame = dyfCustomer,
+    database = 'pyspark_tutorial_db',
+    table_name = 'customers_write_dyf'
+)
+```
